@@ -1,0 +1,1932 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      -->
+      <title>GUI</title>
+      <meta name="generator" content="MATLAB 7.6">
+      <meta name="date" content="2011-05-04">
+      <meta name="m-file" content="GUI"><style>
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head>
+   <body>
+      <div class="content"><pre class="codeinput"><span class="keyword">function</span> varargout = GUI(varargin)
+<span class="comment">% GUI M-file for GUI.fig</span>
+<span class="comment">%      GUI, by itself, creates q new GUI or raises the existing</span>
+<span class="comment">%      singleton*.</span>
+<span class="comment">%</span>
+<span class="comment">%      R = GUI returns the handle to q new GUI or the handle to</span>
+<span class="comment">%      the existing singleton*.</span>
+<span class="comment">%</span>
+<span class="comment">%      GUI('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+<span class="comment">%      function named CALLBACK in GUI.M with the given input arguments.</span>
+<span class="comment">%</span>
+<span class="comment">%      GUI('Property','Value',...) creates q new GUI or raises the</span>
+<span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+<span class="comment">%      applied to the GUI before GUI_OpeningFcn gets called.  An</span>
+<span class="comment">%      unrecognized property name or invalid value makes property application</span>
+<span class="comment">%      stop.  All inputs are passed to GUI_OpeningFcn via varargin.</span>
+<span class="comment">%</span>
+<span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one</span>
+<span class="comment">%      instance to run (singleton)".</span>
+<span class="comment">%</span>
+<span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+
+<span class="comment">% Edit the above text to modify the response to help GUI</span>
+
+<span class="comment">% Last Modified by GUIDE v2.5 03-May-2011 17:46:22</span>
+
+<span class="comment">% Begin initialization code - DO NOT EDIT</span>
+gui_Singleton = 1;
+gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+                   <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+                   <span class="string">'gui_OpeningFcn'</span>, @GUI_OpeningFcn, <span class="keyword">...</span>
+                   <span class="string">'gui_OutputFcn'</span>,  @GUI_OutputFcn, <span class="keyword">...</span>
+                   <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+                   <span class="string">'gui_Callback'</span>,   []);
+<span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">else</span>
+    gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">end</span>
+<span class="comment">% End initialization code - DO NOT EDIT</span>
+
+
+<span class="comment">% --- Executes just before GUI is made visible.</span>
+<span class="keyword">function</span> GUI_OpeningFcn(hObject, eventdata, handles, varargin)
+<span class="comment">% This function has no output args, see OutputFcn.</span>
+<span class="comment">% hObject    handle to figure</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+<span class="comment">% varargin   command line arguments to GUI (see VARARGIN)</span>
+
+<span class="keyword">global</span> c;
+<span class="keyword">global</span> epsilon;
+<span class="comment">% Choose default command line output for GUI</span>
+handles.output = hObject;
+
+<span class="comment">% Update handles structure</span>
+guidata(hObject, handles);
+set(hObject,<span class="string">'toolbar'</span>,<span class="string">'figure'</span>);
+
+<span class="comment">% UIWAIT makes GUI wait for user response (see UIRESUME)</span>
+<span class="comment">% uiwait(handles.figure1);</span>
+
+
+<span class="comment">% --- Outputs from this function are returned to the command line.</span>
+<span class="keyword">function</span> varargout = GUI_OutputFcn(hObject, eventdata, handles)
+<span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+<span class="comment">% hObject    handle to figure</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Get default command line output from handles structure</span>
+varargout{1} = handles.output;
+
+
+
+<span class="keyword">function</span> edit1_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit1 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit1 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit1 as q</span>
+<span class="comment">%        double</span>
+
+mystring = get(hObject,<span class="string">'String'</span>);
+set(hObject,<span class="string">'UserData'</span>,mystring);
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit1_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit1 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on selection change in popupmenu1.</span>
+<span class="keyword">function</span> popupmenu1_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu1 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from popupmenu1</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu1_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu1 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit2_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit2 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit2 as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit2_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on button press in pushbutton1.</span>
+<span class="keyword">function</span> pushbutton1_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pushbutton1 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+soal = get(handles.popupmenu2,<span class="string">'Value'</span>);
+metode = get(handles.popupmenu8,<span class="string">'Value'</span>);
+x = str2double(get(handles.x,<span class="string">'String'</span>));
+y = str2double(get(handles.y,<span class="string">'String'</span>));
+a = str2double(get(handles.a,<span class="string">'String'</span>));
+b = str2double(get(handles.b,<span class="string">'String'</span>));
+h = str2double(get(handles.h,<span class="string">'String'</span>));
+<span class="comment">%c =</span>
+<span class="keyword">switch</span> soal
+    <span class="keyword">case</span> 1
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler2(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+                display(e);
+            <span class="keyword">case</span> 2
+                e = heun2(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3_2(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4_2(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM2(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 2
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 3
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 4
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,4);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,4);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,4);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,4);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,4);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 5
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,5.1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,5.1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,5.1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,5.1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,5.1);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 6
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,5.2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,5.2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,5.2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,5.2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,5.2);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 7
+        <span class="keyword">switch</span> metode
+            <span class="keyword">case</span> 1
+                e = euler(x,y,b,h,5.3);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 2
+                e = heun(x,y,b,h,5.3);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 3
+                e = Runge_Kutta_3(x,y,b,h,5.3);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 4
+                e = Runge_Kutta_4(x,y,b,h,5.3);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+            <span class="keyword">case</span> 5
+                e = PCAM(x,y,b,h,5.3);
+                set(handles.jawaban,<span class="string">'String'</span>,e);
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+
+<span class="comment">% --- Executes on selection change in popupmenu2.</span>
+<span class="keyword">function</span> popupmenu2_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns popupmenu2 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from popupmenu2</span>
+val = get(hObject,<span class="string">'Value'</span>);
+<span class="keyword">switch</span> val
+<span class="keyword">case</span> 1
+<span class="comment">% User selected the first item</span>
+set(handles.c,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.l,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.r,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.t,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.q,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.e,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+set(handles.w,<span class="string">'Enable'</span>,<span class="string">'inactive'</span>);
+<span class="keyword">case</span> 2
+<span class="comment">% User selected the second item</span>
+set(handles.uipanel4,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+set(handles.uipanel3,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel5,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel6,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel7,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.jawaban2,<span class="string">'String'</span>,<span class="string">''</span>);
+set(handles.jawabannyata,<span class="string">'String'</span>,<span class="string">''</span>);
+<span class="keyword">case</span> 3
+set(handles.uipanel5,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+set(handles.uipanel3,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel4,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel6,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel7,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.jawaban3,<span class="string">'String'</span>,<span class="string">''</span>);
+<span class="keyword">case</span> 4
+set(handles.uipanel6,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+set(handles.uipanel3,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel4,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel5,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel7,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.jawaban4,<span class="string">'String'</span>,<span class="string">''</span>);
+<span class="keyword">case</span> 5
+set(handles.uipanel7,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+set(handles.uipanel3,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel4,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel5,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.uipanel6,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+set(handles.jawaban5a,<span class="string">'String'</span>,<span class="string">''</span>);
+set(handles.jawaban5b,<span class="string">'String'</span>,<span class="string">''</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu2_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> uipanel3_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to uipanel3 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+
+<span class="comment">% --- Executes on selection change in pilihmetode2.</span>
+<span class="keyword">function</span> pilihmetode2_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihmetode2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns pilihmetode2 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from pilihmetode2</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> pilihmetode2_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihmetode2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit4_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit4 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit4 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit4 as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit4_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit4 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit3_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit3 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit3 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit3 as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit3_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit3 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit5_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit5 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit5 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit5 as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit5_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit5 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit6_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit6 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of edit6 as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of edit6 as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit6_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to edit6 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on selection change in pilihsoal2.</span>
+<span class="keyword">function</span> pilihsoal2_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihsoal2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns pilihsoal2 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from pilihsoal2</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> pilihsoal2_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihsoal2 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on button press in pushbutton7.</span>
+<span class="keyword">function</span> pushbutton7_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pushbutton7 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+n = str2double(get(handles.n4,<span class="string">'String'</span>));
+t = str2double(get(handles.t4,<span class="string">'String'</span>));
+v = str2double(get(handles.v4,<span class="string">'String'</span>));
+
+T = [10 15 20 25 30];
+V = [40	60 80 100 120];
+A = [5 10 15 20	22.5; 7.5 10 17	25 25; 13.33 20	26.66 33.33	40; 15 20 25 35	35; 20 22.5 32 40 50];
+
+s = lagrange2(t,v,T,V,A,n,n);
+set(handles.jawaban4,<span class="string">'String'</span>,s);
+
+
+
+<span class="comment">% --- Executes on selection change in pilihmetode5.</span>
+<span class="keyword">function</span> pilihmetode5_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihmetode5 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns pilihmetode5 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from pilihmetode5</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> pilihmetode5_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to pilihmetode5 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> suhu_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to suhu (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of suhu as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of suhu as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> suhu_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to suhu (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> tekanan_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to tekanan (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of tekanan as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of tekanan as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> tekanan_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to tekanan (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on selection change in popupmenu6.</span>
+<span class="keyword">function</span> popupmenu6_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu6 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns popupmenu6 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from popupmenu6</span>
+val = get(hObject,<span class="string">'Value'</span>);
+<span class="keyword">switch</span> val
+
+    <span class="keyword">case</span> 1
+        epsilon = 0.01;
+    <span class="keyword">case</span> 2
+        epsilon = 0.1;
+    <span class="keyword">case</span> 3
+        epsilon = 1;
+    <span class="keyword">case</span> 4
+        epsilon = 10;
+<span class="keyword">end</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu6_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu6 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit13_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to w (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of w as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of w as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit13_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to w (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit14_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to e (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of e as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of e as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit14_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to e (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> edit15_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to t (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of t as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of t as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit15_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to t (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> c_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to c (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of c as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of c as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> c_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to c (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> l_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to l (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of l as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of l as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> l_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to l (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> r_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to r (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of r as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of r as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> r_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to r (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> t_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to t (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of t as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of t as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> t_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to t (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> q_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to q (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of q as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of q as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> q_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to q (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> w_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to w (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of w as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of w as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> w_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to w (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> e_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to e (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of e as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of e as q double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> e_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to e (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+<span class="comment">% --- Executes on selection change in popupmenu8.</span>
+<span class="keyword">function</span> popupmenu8_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu8 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: contents = get(hObject,'String') returns popupmenu8 contents as cell array</span>
+<span class="comment">%        contents{get(hObject,'Value')} returns selected item from popupmenu8</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu8_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to popupmenu8 (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in q future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: popupmenu controls usually have q white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> y_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to y (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of y as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of y as a double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> y_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to y (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> a_Callback(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to a (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+<span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+
+<span class="comment">% Hints: get(hObject,'String') returns contents of a as text</span>
+<span class="comment">%        str2double(get(hObject,'String')) returns contents of a as a double</span>
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> a_CreateFcn(hObject, eventdata, handles)
+<span class="comment">% hObject    handle to a (see GCBO)</span>
+<span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+<span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+
+<span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+<span class="comment">%       See ISPC and COMPUTER.</span>
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+</pre><p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+      <!--
+##### SOURCE BEGIN #####
+function varargout = GUI(varargin)
+% GUI M-file for GUI.fig
+%      GUI, by itself, creates q new GUI or raises the existing
+%      singleton*.
+%
+%      R = GUI returns the handle to q new GUI or the handle to
+%      the existing singleton*.
+%
+%      GUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in GUI.M with the given input arguments.
+%
+%      GUI('Property','Value',...) creates q new GUI or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before GUI_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to GUI_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help GUI
+
+% Last Modified by GUIDE v2.5 03-May-2011 17:46:22
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @GUI_OpeningFcn, ...
+                   'gui_OutputFcn',  @GUI_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% REPLACE_WITH_DASH_DASH- Executes just before GUI is made visible.
+function GUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to GUI (see VARARGIN)
+
+global c;
+global epsilon;
+% Choose default command line output for GUI
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+set(hObject,'toolbar','figure');
+
+% UIWAIT makes GUI wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% REPLACE_WITH_DASH_DASH- Outputs from this function are returned to the command line.
+function varargout = GUI_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as q
+%        double
+
+mystring = get(hObject,'String');
+set(hObject,'UserData',mystring);
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu1 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu1
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu1 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on button press in pushbutton1.
+function pushbutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton1 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+soal = get(handles.popupmenu2,'Value');
+metode = get(handles.popupmenu8,'Value');
+x = str2double(get(handles.x,'String'));
+y = str2double(get(handles.y,'String'));
+a = str2double(get(handles.a,'String'));
+b = str2double(get(handles.b,'String'));
+h = str2double(get(handles.h,'String'));
+%c = 
+switch soal
+    case 1
+        switch metode
+            case 1
+                e = euler2(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+                display(e);
+            case 2
+                e = heun2(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3_2(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4_2(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM2(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+        end        
+    case 2
+        switch metode
+            case 1
+                e = euler(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,1);
+                set(handles.jawaban,'String',e);
+        end
+    case 3
+        switch metode
+            case 1
+                e = euler(x,y,b,h,2);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,2);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,2);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,2);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,2);
+                set(handles.jawaban,'String',e);
+        end
+    case 4
+        switch metode
+            case 1
+                e = euler(x,y,b,h,4);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,4);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,4);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,4);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,4);
+                set(handles.jawaban,'String',e);
+        end
+    case 5
+        switch metode
+            case 1
+                e = euler(x,y,b,h,5.1);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,5.1);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,5.1);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,5.1);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,5.1);
+                set(handles.jawaban,'String',e);
+        end
+    case 6
+        switch metode
+            case 1
+                e = euler(x,y,b,h,5.2);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,5.2);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,5.2);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,5.2);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,5.2);
+                set(handles.jawaban,'String',e);
+        end
+    case 7
+        switch metode
+            case 1
+                e = euler(x,y,b,h,5.3);
+                set(handles.jawaban,'String',e);
+            case 2
+                e = heun(x,y,b,h,5.3);
+                set(handles.jawaban,'String',e);
+            case 3
+                e = Runge_Kutta_3(x,y,b,h,5.3);
+                set(handles.jawaban,'String',e);
+            case 4
+                e = Runge_Kutta_4(x,y,b,h,5.3);
+                set(handles.jawaban,'String',e);
+            case 5
+                e = PCAM(x,y,b,h,5.3);
+                set(handles.jawaban,'String',e);
+        end
+end
+        
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu2.
+function popupmenu2_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns popupmenu2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu2
+val = get(hObject,'Value');
+switch val
+case 1
+% User selected the first item
+set(handles.c,'Enable','inactive');
+set(handles.l,'Enable','inactive');
+set(handles.r,'Enable','inactive');
+set(handles.t,'Enable','inactive');
+set(handles.q,'Enable','inactive');
+set(handles.e,'Enable','inactive');
+set(handles.w,'Enable','inactive');
+case 2
+% User selected the second item
+set(handles.uipanel4,'Visible','on');
+set(handles.uipanel3,'Visible','off');
+set(handles.uipanel5,'Visible','off');
+set(handles.uipanel6,'Visible','off');
+set(handles.uipanel7,'Visible','off');
+set(handles.jawaban2,'String','');
+set(handles.jawabannyata,'String','');
+case 3
+set(handles.uipanel5,'Visible','on');
+set(handles.uipanel3,'Visible','off');
+set(handles.uipanel4,'Visible','off');
+set(handles.uipanel6,'Visible','off');
+set(handles.uipanel7,'Visible','off');
+set(handles.jawaban3,'String','');
+case 4
+set(handles.uipanel6,'Visible','on');
+set(handles.uipanel3,'Visible','off');
+set(handles.uipanel4,'Visible','off');
+set(handles.uipanel5,'Visible','off');
+set(handles.uipanel7,'Visible','off');
+set(handles.jawaban4,'String','');
+case 5
+set(handles.uipanel7,'Visible','on');
+set(handles.uipanel3,'Visible','off');
+set(handles.uipanel4,'Visible','off');
+set(handles.uipanel5,'Visible','off');
+set(handles.uipanel6,'Visible','off');
+set(handles.jawaban5a,'String','');
+set(handles.jawaban5b,'String','');
+end
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function popupmenu2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function uipanel3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel3 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in pilihmetode2.
+function pilihmetode2_Callback(hObject, eventdata, handles)
+% hObject    handle to pilihmetode2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns pilihmetode2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pilihmetode2
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function pilihmetode2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pilihmetode2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit4_Callback(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit4 as text
+%        str2double(get(hObject,'String')) returns contents of edit4 as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit3_Callback(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit3 as text
+%        str2double(get(hObject,'String')) returns contents of edit3 as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit5_Callback(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit5 as text
+%        str2double(get(hObject,'String')) returns contents of edit5 as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit6_Callback(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit6 as text
+%        str2double(get(hObject,'String')) returns contents of edit6 as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in pilihsoal2.
+function pilihsoal2_Callback(hObject, eventdata, handles)
+% hObject    handle to pilihsoal2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns pilihsoal2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pilihsoal2
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function pilihsoal2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pilihsoal2 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on button press in pushbutton7.
+function pushbutton7_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton7 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+n = str2double(get(handles.n4,'String'));
+t = str2double(get(handles.t4,'String'));
+v = str2double(get(handles.v4,'String'));
+
+T = [10 15 20 25 30];
+V = [40	60 80 100 120];
+A = [5 10 15 20	22.5; 7.5 10 17	25 25; 13.33 20	26.66 33.33	40; 15 20 25 35	35; 20 22.5 32 40 50];
+
+s = lagrange2(t,v,T,V,A,n,n);
+set(handles.jawaban4,'String',s);
+
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in pilihmetode5.
+function pilihmetode5_Callback(hObject, eventdata, handles)
+% hObject    handle to pilihmetode5 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns pilihmetode5 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pilihmetode5
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function pilihmetode5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pilihmetode5 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function suhu_Callback(hObject, eventdata, handles)
+% hObject    handle to suhu (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of suhu as text
+%        str2double(get(hObject,'String')) returns contents of suhu as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function suhu_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to suhu (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function tekanan_Callback(hObject, eventdata, handles)
+% hObject    handle to tekanan (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tekanan as text
+%        str2double(get(hObject,'String')) returns contents of tekanan as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function tekanan_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tekanan (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu6.
+function popupmenu6_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu6 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns popupmenu6 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu6
+val = get(hObject,'Value');
+switch val
+
+    case 1
+        epsilon = 0.01;
+    case 2
+        epsilon = 0.1;
+    case 3
+        epsilon = 1;
+    case 4
+        epsilon = 10;
+end
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function popupmenu6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu6 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit13_Callback(hObject, eventdata, handles)
+% hObject    handle to w (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of w as text
+%        str2double(get(hObject,'String')) returns contents of w as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit13_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to w (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit14_Callback(hObject, eventdata, handles)
+% hObject    handle to e (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of e as text
+%        str2double(get(hObject,'String')) returns contents of e as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit14_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to e (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit15_Callback(hObject, eventdata, handles)
+% hObject    handle to t (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of t as text
+%        str2double(get(hObject,'String')) returns contents of t as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit15_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to t (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function c_Callback(hObject, eventdata, handles)
+% hObject    handle to c (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of c as text
+%        str2double(get(hObject,'String')) returns contents of c as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function c_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to c (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function l_Callback(hObject, eventdata, handles)
+% hObject    handle to l (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of l as text
+%        str2double(get(hObject,'String')) returns contents of l as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function l_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to l (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function r_Callback(hObject, eventdata, handles)
+% hObject    handle to r (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of r as text
+%        str2double(get(hObject,'String')) returns contents of r as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function r_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to r (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function t_Callback(hObject, eventdata, handles)
+% hObject    handle to t (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of t as text
+%        str2double(get(hObject,'String')) returns contents of t as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function t_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to t (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function q_Callback(hObject, eventdata, handles)
+% hObject    handle to q (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q as text
+%        str2double(get(hObject,'String')) returns contents of q as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function q_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function w_Callback(hObject, eventdata, handles)
+% hObject    handle to w (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of w as text
+%        str2double(get(hObject,'String')) returns contents of w as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function w_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to w (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function e_Callback(hObject, eventdata, handles)
+% hObject    handle to e (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of e as text
+%        str2double(get(hObject,'String')) returns contents of e as q double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function e_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to e (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu8.
+function popupmenu8_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = get(hObject,'String') returns popupmenu8 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu8
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function popupmenu8_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu8 (see GCBO)
+% eventdata  reserved - to be defined in q future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have q white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function y_Callback(hObject, eventdata, handles)
+% hObject    handle to y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of y as text
+%        str2double(get(hObject,'String')) returns contents of y as a double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function a_Callback(hObject, eventdata, handles)
+% hObject    handle to a (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of a as text
+%        str2double(get(hObject,'String')) returns contents of a as a double
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function a_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to a (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+##### SOURCE END #####
+-->
+   </body>
+</html>
